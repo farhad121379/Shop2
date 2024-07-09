@@ -14,6 +14,11 @@ namespace core.Deta
         {
             optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=shop2;Integrated Security=true;");
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<kala>().Property(p => p.name).HasMaxLength(50);
+        }
         public DbSet<kala> kala { get; set; }
         public DbSet<Gropkala> Gropkala { get; set; }
 

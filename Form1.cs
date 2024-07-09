@@ -1,21 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using core.Deta;
+﻿using core.Deta;
 using Domon1.ENtityes;
-using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace Shop2
 {
     public partial class Form1 : Form
     {
         Shop2DB Cont = new Shop2DB();
+        kala selectkala = null;
         public Form1()
         {
             InitializeComponent();
@@ -24,14 +18,30 @@ namespace Shop2
 
         private void R_c(object sender, EventArgs e)
         {
-            kala kala = new kala {
-             name =txt_G.Text.Trim()
+            if (selectkala == null)
+            {
+                kala Kala = new kala
+                {
+                    name = txt_G.Text.Trim(),
+                    ghimat = txtGh.Text.Trim(),
+                    mojodi = txtmo.Text.Trim()
 
-             };
+                };
 
-            Cont.Add(kala);
-            Cont.SaveChanges();
-            MessageBox.Show("با موفقیت ثبت شد.");
+                Cont.Add(Kala);
+            }
+            else
+            {
+                selectkala.name = txt_G.Text.Trim();
+                selectkala.mojodi = txtmo.Text.Trim();
+                selectkala.ghimat = txtGh.Text.Trim();
+                Cont.Update(selectkala);
+            }
+                Cont.SaveChanges();
+                MessageBox.Show("با موفقیت ثبت شد.");
+                Showkala();
+            
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -43,6 +53,35 @@ namespace Shop2
         {
             dataGridView1.AutoGenerateColumns = false;
             dataGridView1.DataSource = Cont.kala.ToList();
+
+        }
+
+        private void dataGridView1_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+
+            if (e.RowIndex == -1)
+                return;
+
+            int id = Convert.ToInt32(dataGridView1["Column1", e.RowIndex].Value);
+
+            selectkala = Cont.kala.Find(id);
+            if (selectkala != null)
+            {
+                txt_G.Text = selectkala.name;
+                txtmo.Text = selectkala.mojodi;
+                txtGh.Text = selectkala.ghimat;
+
+            }
+        }
+
+        private void Remove(object sender, EventArgs e)
+        {
+            
+
+            Cont.Remove(selectkala);
+            Cont.SaveChanges();
+
+           Showkala();
         }
     }
 }
