@@ -13,6 +13,7 @@ namespace Domon1.ENtityes
         public virtual string name { get; set; }
         public virtual string ghimat { get; set; }
         public virtual string mojodi { get; set; }
+        public virtual int moojoodi { get; set; }
         ///ارتباط ها 
         public virtual Gropkala grop_Kala1 { get; set; }
 
